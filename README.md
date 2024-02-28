@@ -171,5 +171,5 @@ Asegúrese de actualizar las pruebas según corresponda.
 
 ## 🪪 Licencia
 
-[MIT](https://choosealicense.com/licenses/mit/)
-Copyright (c) [2024] [Ecommetrica](https://ecommetrica.com/)
+[MIT](#)
+Creado por [Ecommetrica](https://ecommetrica.com/)
