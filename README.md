@@ -162,7 +162,7 @@ El componente `<select>` se utiliza para que el usuario seleccione la hora de su
 ![logo](/public/select.png)
 
 
-## 👾 Contribucion
+## 👾 Contribución
 
 Las `Pull requests` son bienvenidas. Para cambios importantes, abra primero un problema
 para discutir lo que le gustaría cambiar.
