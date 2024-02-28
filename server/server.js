@@ -5,15 +5,16 @@ const mysql = require("mysql");
 const moment = require("moment-timezone");
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT;
+
 
 const db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "bitescreadores_booking_information",
-    port: 3306, // Puerto de MySQL en tu configuración de XAMPP
-  });
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT,
+});
   
   db.connect((err) => {
     if (err) {
@@ -27,9 +28,10 @@ const db = mysql.createConnection({
   app.use(bodyParser.json());
 
     app.post("/booking", async (req, res) => {
+        let table = process.env.TABLE_NAME;
         let { name, email, phone, date } = req.body;
         let query =
-            "INSERT INTO information (name, email, phone, date) VALUES (?, ?, ?, ?)";
+            `INSERT INTO ${table} (name, email, phone, date) VALUES (?, ?, ?, ?)`;
         db.query(query, [name, email, phone, date], async (error) => {
             if (error) throw error;
             res.json("Datos del formulario almacenados");
@@ -38,7 +40,8 @@ const db = mysql.createConnection({
     );
  
   app.get("/bookedHours", async (req, res) => {
-    let query = "SELECT date FROM information";
+    let table = process.env.TABLE_NAME;
+    let query = `SELECT date FROM ${table}`;
     db.query(query, async (error, results) => {
       if (error) throw error;
       const bookedHours = results.map(result => ({
