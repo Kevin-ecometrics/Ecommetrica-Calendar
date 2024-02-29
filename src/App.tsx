@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
-import { Calendar, utils, Day, CalendarDigit } from "react-modern-calendar-datepicker";
+import {
+  Calendar,
+  utils,
+  Day,
+  CalendarDigit,
+} from "react-modern-calendar-datepicker";
 import { motion } from "framer-motion";
 import axios from "axios";
-import toast, { Toaster } from 'react-hot-toast';
-
+import toast, { Toaster } from "react-hot-toast";
 
 const App: React.FC = () => {
   interface BookedHour {
@@ -24,114 +28,120 @@ const App: React.FC = () => {
   const [bookedHours, setBookedHours] = useState<BookedHour[]>([]);
   const [resetSelect, setResetSelect] = useState(false); // Estado para reiniciar el select
   const hours = Array.from({ length: 10 }, (_, i) => 9 + i);
-  const allHoursBooked = hours.every(hour => {
+  const allHoursBooked = hours.every((hour) => {
     const time24 = hour < 10 ? `0${hour}:00:00` : `${hour}:00:00`;
-    const date = selectedDay ? `${selectedDay.year}-${selectedDay.month < 10 ? '0' + selectedDay.month : selectedDay.month}-${selectedDay.day < 10 ? '0' + selectedDay.day : selectedDay.day}` : '';
-    return bookedHours.some(bh => bh.date === date && bh.hour === time24);
+    const date = selectedDay
+      ? `${selectedDay.year}-${
+          selectedDay.month < 10 ? "0" + selectedDay.month : selectedDay.month
+        }-${selectedDay.day < 10 ? "0" + selectedDay.day : selectedDay.day}`
+      : "";
+    return bookedHours.some((bh) => bh.date === date && bh.hour === time24);
   });
-  const title = allHoursBooked ? 'No hay horario disponible' : 'Selecciona una hora';
+  const title = allHoursBooked
+    ? "No hay horario disponible"
+    : "Selecciona una hora";
   const myCustomLocale = {
     months: [
-    'Enero',
-    'Febrero',
-    'Marzo',
-    'Abril',
-    'Mayo',
-    'Junio',
-    'Julio',
-    'Agosto',
-    'Septiembre',
-    'Octubre',
-    'Noviembre',
-    'Diciembre'
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
     ],
-  
+
     // week days by order
     weekDays: [
       {
-        name: 'Domingo', // used for accessibility 
-        short: 'D', // displayed at the top of days' rows
+        name: "Domingo", // used for accessibility
+        short: "D", // displayed at the top of days' rows
         isWeekend: true, // is it a formal weekend or not?
       },
       {
-        name: 'Lunes',
-        short: 'L',
+        name: "Lunes",
+        short: "L",
       },
       {
-        name: 'Martes',
-        short: 'M',
+        name: "Martes",
+        short: "M",
       },
       {
-        name: 'Miércoles',
-        short: 'M',
+        name: "Miércoles",
+        short: "M",
       },
       {
-        name: 'Jueves',
-        short: 'J',
+        name: "Jueves",
+        short: "J",
       },
       {
-        name: 'Viernes',
-        short: 'V',
+        name: "Viernes",
+        short: "V",
       },
       {
-        name: 'Sabado',
-        short: 'S',
+        name: "Sabado",
+        short: "S",
         isWeekend: false,
       },
     ],
-  
+
     // just play around with this number between 0 and 6
     weekStartingIndex: 0,
-  
+
     // return a { year: number, month: number, day: number } object
     getToday(gregorainTodayObject: DateObject): DateObject {
       return gregorainTodayObject;
     },
-    
+
     toNativeDate(date: DateObject): Date {
       return new Date(date.year, date.month - 1, date.day);
     },
-    
+
     getMonthLength(date: DateObject): number {
       return new Date(date.year, date.month, 0).getDate();
     },
-    
+
     transformDigit(digit: number): number {
       return digit;
     },
-  
+
     // texts in the date picker
-    nextMonth: 'Next Month',
-    previousMonth: 'Previous Month',
-    openMonthSelector: 'Open Month Selector',
-    openYearSelector: 'Open Year Selector',
-    closeMonthSelector: 'Close Month Selector',
-    closeYearSelector: 'Close Year Selector',
-    defaultPlaceholder: 'Select...',
-  
+    nextMonth: "Next Month",
+    previousMonth: "Previous Month",
+    openMonthSelector: "Open Month Selector",
+    openYearSelector: "Open Year Selector",
+    closeMonthSelector: "Close Month Selector",
+    closeYearSelector: "Close Year Selector",
+    defaultPlaceholder: "Select...",
+
     // for input range value
-    from: 'from',
-    to: 'to',
-  
-  
+    from: "from",
+    to: "to",
+
     // used for input value when multi dates are selected
-    digitSeparator: ',',
-  
+    digitSeparator: ",",
+
     // if your provide -2 for example, year will be 2 digited
     yearLetterSkip: 0,
-  
+
     // is your language rtl or ltr?
     isRtl: false,
-  }
+  };
 
-  
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     const isNumeric = /^\d+$/.test(phone);
 
     if (!isNumeric || phone.length !== 10) {
-      alert('El teléfono debe contener solo números y tener exactamente 10 dígitos');
+      alert(
+        "El teléfono debe contener solo números y tener exactamente 10 dígitos"
+      );
       return;
     }
 
@@ -155,12 +165,12 @@ const App: React.FC = () => {
         BookingData
       );
       console.log(response);
-      toast.success('Reservación exitosa');
-      setName('');
-      setEmail('');
-      setPhone('');
-      setSelectedTime('');
-      setResetSelect(prevState => !prevState); 
+      toast.success("Reservación exitosa");
+      setName("");
+      setEmail("");
+      setPhone("");
+      setSelectedTime("");
+      setResetSelect((prevState) => !prevState);
     } catch (error) {
       console.log(error);
     }
@@ -169,8 +179,10 @@ const App: React.FC = () => {
   useEffect(() => {
     async function getBookedHours() {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_HOST_URL}/bookedHours`);
-        setBookedHours(response.data); 
+        const response = await axios.get(
+          `${import.meta.env.VITE_HOST_URL}/bookedHours`
+        );
+        setBookedHours(response.data);
       } catch (error) {
         console.error(error);
       }
